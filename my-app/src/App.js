@@ -6,6 +6,8 @@ import Login from './pages/login/Login';
 import Signup from './pages/signup/Signup';
 import Home from './pages/home/Home';
 import Dashboard from './pages/dashboard/Dashboard';
+import ForgotPassword from './pages/forgot-password/ForgotPassword'
+import PrivateRoute from './components/PrivateRoute';
 
 // components
 import Navbar from './components/NavbarComp';
@@ -20,7 +22,10 @@ function App() {
         <Route path="/" element={<Home/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/signup" element={<Signup/>}/>
-        <Route path="/dashboard" element={<Dashboard/>}/>
+        <Route path="/forgot-password" element={<ForgotPassword/>}/>
+        <Route path="/dashboard" element={<PrivateRoute/>}>
+          <Route path="/dashboard" element={<Dashboard/>}/>
+        </Route>
       </Routes>
     </div>
   );

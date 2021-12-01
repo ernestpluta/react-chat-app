@@ -1,52 +1,69 @@
-import { Form, Button, Alert } from 'react-bootstrap';
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Form, Button, Alert, FloatingLabel } from 'react-bootstrap';
+import { useState, useRef, useEffect} from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { auth } from '../../firebase/firebase';
 import './Login.css';
 
 export default function Login() {
+  const [error, setError] = useState('');
+  const navigate = useNavigate()
+  const emailRef = useRef()
+  const passwordRef = useRef()
+  const { login } = useAuth();
 
-  const [error, setError] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const { login } = useAuth()
-
-
-const handleLogin = (e) => {
-  e.preventDefault()
-  login(email,password)
-}
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    if (emailRef.current.value === '' && passwordRef.current.value === '') {
+      setError("Wrong credentials");
+    }
+    try {
+      await login(emailRef.current.value, passwordRef.current.value)
+       navigate('/dashboard')
+    } catch (err) {
+      setError(err.message);
+    }
+  };
   return (
     <div>
-      <Form className="mx-auto" onSubmit={handleLogin}>
+      <Form className="mx-auto" onSubmit={handleLogin} style={{minHeight: '420px'}}>
         <h3 className="mb-4">Log to account</h3>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           {error && error && (
-            <Alert variant="danger">Incorrect email or password </Alert>
+            <Alert variant="danger">{error} </Alert>
           )}
-          <Form.Label>Email address</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <Form.Text className="text-muted">
-            We'll never share your email with anyone else.
+          <FloatingLabel
+            controlId="Email"
+            label="Email address"
+            className="mt-3"
+          >
+            <Form.Control
+              type="email"
+              placeholder="Enter Email"
+              ref={emailRef}
+            />
+          </FloatingLabel>
+          <FloatingLabel controlId="Password" label="Password" className="mt-3">
+            <Form.Control
+              type="password"
+              placeholder="Password"
+              ref={passwordRef}
+            />
+          </FloatingLabel>
+          <Form.Text className="ms-1 mt-1">
+            Password must have atleast 6 characters.
           </Form.Text>
         </Form.Group>
-
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </Form.Group>
-        <Button variant="primary" type="submit" className="mt-2 px-4">
+        <Button variant="primary" type="submit" className="mt-2 w-100 py-2">
           Log in
         </Button>
+        <div className="text-center mt-2">
+          <Link
+            to="/forgot-password"
+            className="text-decoration-none"
+          >
+            Forgot your password?
+          </Link>
+        </div>
       </Form>
     </div>
   );

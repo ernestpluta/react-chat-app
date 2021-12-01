@@ -1,8 +1,7 @@
 import React from 'react';
 import { Form, Button, Alert, Spinner, FloatingLabel } from 'react-bootstrap';
 import { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { auth } from '../../firebase/firebase';
+import { useNavigate, Link} from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
 import './Signup.css';
@@ -13,16 +12,17 @@ export default function Signup() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-
-  const navigate = useNavigate();
   const { signup, isPending } = useAuth();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (emailRef.current.value === '' && passwordRef.current.value === '' && passwordConfirmRef.current.value === '') {
+      setError("Email and password cannot be empty");
+    }
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
       setError('Passwords do not match');
     }
     try {
-      setError('');
       await signup(emailRef.current.value, passwordConfirmRef.current.value);
     } catch (err) {
       setError(err.message);
@@ -41,20 +41,20 @@ export default function Signup() {
       {!isPending && (
         <Form className="mx-auto" onSubmit={handleSubmit}>
           <h3 className="mb-4">Sign up </h3>
-          {error && error && <Alert variant="warning">{error}</Alert>}
-          <Form.Group className="mb-3" controlId="formBasicEmail">
+          {error && error && <Alert variant="danger">{error}</Alert>}
+          <Form.Group className="" controlId="formBasicEmail">
             <FloatingLabel
-              controlId="floatingInput"
+              controlId="Email"
               label="Email address"
               className="mb-1"
             >
-              <Form.Control type="email" placeholder="name@example.com" />
+              <Form.Control type="email" placeholder="Email address" ref={emailRef}/>
             </FloatingLabel>
             <Form.Text className="ms-1">
               We will never share your email with anybody.
             </Form.Text>
             <FloatingLabel
-              controlId="floatingPassword"
+              controlId="Password"
               label="Password"
               className="mt-3"
             >
@@ -66,7 +66,7 @@ export default function Signup() {
             </FloatingLabel>
 
             <FloatingLabel
-              controlId="floatingPassword"
+              controlId="confirm password"
               label="Confirm Password"
               className="mt-3"
             >
@@ -81,11 +81,21 @@ export default function Signup() {
           <Button
             variant="primary"
             type="submit"
-            className="mt-2 px-4"
+            className="mt-4 w-100 py-2"
             disabled={loading}
           >
             Sign Up
           </Button>
+
+          <Link to="/login">
+          <Button
+            variant="transparent"
+            type="submit"
+            className="mt-2 w-100 text-primary"
+          >
+            Already have an account?
+          </Button>
+          </Link>
         </Form>
       )}
     </div>
