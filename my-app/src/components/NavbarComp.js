@@ -1,20 +1,42 @@
-import { Navbar, Container, Button } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { Navbar, Container, Button, Dropdown } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import Signout from '../pages/Signout';
+import './NavbarComp.css';
+import ProfilePic from '../assets/annonymous.png';
 import { auth } from '../firebase/firebase';
-import Signout from '../pages/signout/Signout';
-
+import { doc, onSnapshot } from '@firebase/firestore';
+import { db } from '../firebase/firebase';
+import { useCallback, useEffect, useState } from 'react';
+import { updateProfile } from '@firebase/auth';
 export default function NavbarComp() {
-  const { currentUser, isLogged } = useAuth();
-  if(currentUser){
-    console.log(auth.currentUser.uid)
-  }
+  const { currentUser, setCurrentUser } = useAuth();
+  const [userName, setUserName] = useState();
 
+  // const readUserName = () => {
+  //   onSnapshot(doc(db, 'users', auth.currentUser.uid), (doc) => {
+  //     setCurrentUser(currentUser.displayName = doc.data().name)
+  //     // setUserName(doc.data().name)
+  //     // currentUser.displayName = userName
+  //   })
+  // }
+
+  useEffect(() => {
+    if (currentUser) {
+      onSnapshot(doc(db, 'users', auth.currentUser.uid), (doc) => {
+        updateProfile(auth.currentUser, {
+          displayName: doc.data().name,
+        });
+      });
+    }
+  }, [currentUser]);
   return (
     <div>
       <div>
-        <Navbar className="py-3" style={{boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'}}>
+        <Navbar
+          className="py-3"
+          style={{ boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px' }}
+        >
           <Container className="py-2">
             <Navbar.Brand href="/" className="font-weight-bold">
               My Money
@@ -22,22 +44,45 @@ export default function NavbarComp() {
             <Navbar.Toggle />
             <Navbar.Collapse className="justify-content-end">
               <Navbar.Text>
-                {isLogged && currentUser && currentUser.email}
+                {/* {currentUser &&  <span>Welcome: {currentUser.email}</span>} */}
+                {currentUser && (
+                  <span className="me-3">Cześć, {currentUser.displayName}</span>
+                )}
               </Navbar.Text>
-              {isLogged && <Signout />}
-              {!isLogged && (
+              {currentUser && (
+                <Dropdown>
+                  <Dropdown.Toggle variant="transparent" className="px-0 py-0">
+                    <img
+                      src={ProfilePic}
+                      alt="Profile pic"
+                      width="38px"
+                      className="rounded-circle"
+                    />
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu className="p-2">
+                    <Dropdown.Item href="/">Home</Dropdown.Item>
+                    <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
+                    <Dropdown.Item href="#">
+                      <Signout />
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              )}
+              {!currentUser && (
                 <>
-              <Link to="/login">
-                <Button className=" ms-4 px-4">Login</Button>
-              </Link>
-              <Link to="/signup">
-                <Button
-                  className=" ms-4 px-4 black"
-                  variant="outline-primary"
-                >
-                  Sign Up
-                </Button>
-              </Link>
+                  <Link to="/login">
+                    <Button
+                      className="ms-4 px-2 border-0 bg-transparent"
+                      style={{ color: 'rgba(107,114,128)' }}
+                    >
+                      Log In
+                    </Button>
+                  </Link>
+                  <Link to="/signup">
+                    <Button className=" ms-4 px-4 black" variant="primary">
+                      Sign Up
+                    </Button>
+                  </Link>
                 </>
               )}
             </Navbar.Collapse>

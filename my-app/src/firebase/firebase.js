@@ -1,21 +1,21 @@
-import firebase from 'firebase/app'
-import 'firebase/firestore';
-import 'firebase/auth'
-// require('firebase/auth')
+import { getFirestore } from '@firebase/firestore';
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+require('dotenv').config({path:'./.env'})
 
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBHQAfh5z6zDtvJ3dx5PvmwvI3_1k6tivU",
-    authDomain: "cooking-site-912c9.firebaseapp.com",
-    projectId: "cooking-site-912c9",
-    storageBucket: "cooking-site-912c9.appspot.com",
-    messagingSenderId: "266087791187",
-    appId: "1:266087791187:web:5450fc2a061a87dd1b64a6"
-  };
-    // initialize firebase
-   const db = firebase.initializeApp(firebaseConfig)
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
 
+};
+// initialize firebase
+const app = initializeApp(firebaseConfig);
 
-    const auth = db.auth()
-    export { db, auth }
-  
+const auth = getAuth(app);
+const db = getFirestore(app)
+export { db, auth };

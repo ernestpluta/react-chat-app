@@ -1,31 +1,31 @@
-import './App.css';
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './hooks/useAuth';
 // routes
 import Login from './pages/login/Login';
-import Signup from './pages/signup/Signup';
-import Home from './pages/home/Home';
-import Dashboard from './pages/dashboard/Dashboard';
-import ForgotPassword from './pages/forgot-password/ForgotPassword'
-import PrivateRoute from './components/PrivateRoute';
+import Signup from './pages/Signup';
+import Home from './pages/Home';
+import ForgotPassword from './pages/ForgotPassword'
+import Dashboard from './pages/Dashboard';
+import ProtectedRoute from './components/ProtectedRoute';
 
 // components
 import Navbar from './components/NavbarComp';
+import { useEffect, useState } from 'react';
+import { doc, onSnapshot } from '@firebase/firestore';
+import { auth, db } from './firebase/firebase';
 
 function App() {
-  const navigate = useNavigate()
-  const { currentUser } = useAuth()
+const {currentUser} = useAuth()
+
   return (
     <div className="App">
       <Navbar/>
       <Routes>
-        <Route path="/" element={<Home/>}/>
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/signup" element={<Signup/>}/>
+        <Route path="/" element={currentUser ? <Home/> : <Navigate to="/login"/>}/>
+        <Route path="/dashboard" element={currentUser ? <Dashboard/> : <Navigate to="/login" element={<Login/>} replace={true}/>}/>
+        <Route path="/login" element={!currentUser? <Login/> : <Navigate to="/dashboard" element={<Dashboard/>} replace={true}/>}/>
+        <Route path="/signup" element={!currentUser ? <Signup/> : <Navigate to="/dashboard"/>}/>
         <Route path="/forgot-password" element={<ForgotPassword/>}/>
-        <Route path="/dashboard" element={<PrivateRoute/>}>
-          <Route path="/dashboard" element={<Dashboard/>}/>
-        </Route>
       </Routes>
     </div>
   );
