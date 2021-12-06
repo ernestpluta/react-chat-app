@@ -24,11 +24,13 @@ export default function Dashboard() {
   const { currentUser } = useAuth();
 
   useEffect(() => {
-    getDoc(doc(db, 'users', auth.currentUser.uid)).then((doc) => {
-      if (doc.exists) setUser(doc.data());
-    });
+    if(auth.currentUser){
+      getDoc(doc(db, 'users', auth.currentUser.uid)).then((doc) => {
+        if (doc.exists) setUser(doc.data());
+      });
+    }
   }, []);
-  console.log(user);
+  // console.log(user);
   return (
     <div>
       <Form className="mx-auto dashboard" style={{ maxWidth: '600px' }}>
@@ -72,7 +74,7 @@ export default function Dashboard() {
                     <p>Created At: {user?.createdAt.toDate().toDateString()}</p>
                   </Col>
                 </Row>
-                <hr />
+                {/* <hr />
                 <Col xs={12} md={8}>
                   <h2>Reset Password</h2>
                 </Col>
@@ -88,7 +90,7 @@ export default function Dashboard() {
                   className="mt-4 w-25 py-2 ps-auto"
                 >
                   Update
-                </Button>
+                </Button> */}
               </Container>
             </>
           )}

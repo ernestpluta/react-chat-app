@@ -1,5 +1,5 @@
 import { Form, Button, Alert, FloatingLabel, Spinner } from 'react-bootstrap';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { db, auth } from '../../firebase/firebase';
 import { signInWithEmailAndPassword } from '@firebase/auth';
@@ -15,8 +15,8 @@ export default function Login() {
     password: '',
   });
   const navigate = useNavigate();
-  const { email, password } = userData;
 
+  const { email, password } = userData;
   // get attributes and pass current value
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
@@ -29,12 +29,14 @@ export default function Login() {
     }
     try {
       setError('');
-      setIsPending(true);
+      // setIsPending(true);
       const cred = await signInWithEmailAndPassword(auth, email, password);
       await updateDoc(doc(db, 'users', cred.user.uid), { isOnline: true });
       setUserData({ email: '', password: '' });
+      localStorage.setItem('userAuthenticated',true)
       setIsPending(false);
-      navigate('/dashboard')
+      // navigate('/dashboard')
+      
     } catch (err) {
       setIsPending(false);
       setError(err.message);

@@ -5,7 +5,7 @@ import Signout from '../pages/Signout';
 import './NavbarComp.css';
 import ProfilePic from '../assets/annonymous.png';
 import { auth } from '../firebase/firebase';
-import { doc, onSnapshot } from '@firebase/firestore';
+import { doc, onSnapshot ,getDoc} from '@firebase/firestore';
 import { db } from '../firebase/firebase';
 import { useCallback, useEffect, useState } from 'react';
 import { updateProfile } from '@firebase/auth';
@@ -22,13 +22,16 @@ export default function NavbarComp() {
   // }
 
   useEffect(() => {
-    if (currentUser) {
-      onSnapshot(doc(db, 'users', auth.currentUser.uid), (doc) => {
-        updateProfile(auth.currentUser, {
-          displayName: doc.data().name,
+    const getUserName = async() => {
+      if (currentUser) {
+         onSnapshot(doc(db, 'users', auth.currentUser.uid),(doc) => {
+           updateProfile(auth.currentUser, {
+            displayName: doc.data().name,
+          });
         });
-      });
+      }
     }
+    getUserName()
   }, [currentUser]);
   return (
     <div>
@@ -39,14 +42,13 @@ export default function NavbarComp() {
         >
           <Container className="py-2">
             <Navbar.Brand href="/" className="font-weight-bold">
-              My Money
+              Chatbook
             </Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse className="justify-content-end">
               <Navbar.Text>
-                {/* {currentUser &&  <span>Welcome: {currentUser.email}</span>} */}
-                {currentUser && (
-                  <span className="me-3">Cześć, {currentUser.displayName}</span>
+                {auth.currentUser?.displayName && (
+                  <span className="me-3">Cześć, {auth.currentUser.displayName}</span>
                 )}
               </Navbar.Text>
               {currentUser && (
@@ -62,7 +64,7 @@ export default function NavbarComp() {
                   <Dropdown.Menu className="p-2">
                     <Dropdown.Item href="/">Home</Dropdown.Item>
                     <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
-                    <Dropdown.Item href="#">
+                    <Dropdown.Item>
                       <Signout />
                     </Dropdown.Item>
                   </Dropdown.Menu>

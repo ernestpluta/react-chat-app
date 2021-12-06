@@ -1,7 +1,7 @@
 .camera{
     position: relative;
     top:0px;
-    left:-100px;
+    left:-90px;
     width:40px;
     cursor: pointer;
 }

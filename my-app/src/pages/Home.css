@@ -1,0 +1,22 @@
+.chat_wrapper{
+    background:#F4F7FB !important;
+    padding:2rem 0 10rem 0;
+}
+.chat_container{
+    max-width: 790px;
+    /* height: 100vh; */
+    margin: 0 auto;
+}
+.chat_left_inner{
+    background:#fff;
+    padding: 1rem 0rem;
+    margin-top:1rem;
+    border-radius: 10px;
+
+}
+.chat_left{
+    width:20rem;
+}
+.chat_left img {
+    margin: 0 1rem;
+}

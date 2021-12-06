@@ -1,7 +1,7 @@
 import { Form, Button, Alert, Spinner, FloatingLabel } from 'react-bootstrap';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { setDoc, doc, Timestamp} from '@firebase/firestore';
+import { setDoc, doc, Timestamp } from '@firebase/firestore';
 import { db, auth } from '../firebase/firebase';
 import { createUserWithEmailAndPassword } from '@firebase/auth';
 import { useAuth } from '../hooks/useAuth';
@@ -29,7 +29,7 @@ export default function Signup() {
 
     try {
       setError('');
-      setIsPending(true);
+      // setIsPending(true);
       const cred = await createUserWithEmailAndPassword(auth, email, password);
       await setDoc(doc(db, 'users', cred.user.uid), {
         uid: cred.user.uid,
@@ -37,9 +37,12 @@ export default function Signup() {
         email: email,
         createdAt: Timestamp.fromDate(new Date()),
         isOnline: true,
-      });
-      setUserData({name: '', email: '', password: ''})
-      setIsPending(false);
+      }).then(() => {
+        setUserData({name: '', email: '', password: ''})
+        localStorage.setItem('userAuthenticated',true)
+        setIsPending(false);
+      })
+      navigate('/dashboard')
     } catch (err) {
       setIsPending(false);
       setError(err.message);
