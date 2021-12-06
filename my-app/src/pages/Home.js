@@ -9,9 +9,11 @@ import './Home.css';
 export default function Home() {
   const [user, setUser] = useState();
   useEffect(() => {
+    if(auth.currentUser){
       getDoc(doc(db, 'users', auth.currentUser.uid)).then((doc) => {
         if (doc.exists) setUser(doc.data());
       });
+    }
   }, []);
   return (
     <div className="chat_wrapper">

@@ -1,7 +1,16 @@
 .chat_wrapper{
-    background:#F4F7FB !important;
-    padding:2rem 0 10rem 0;
+    /* background:#F4F7FB !important; */
+    padding:3rem 0 10rem 0;
+    height: 100vh;
 }
+/* global styles*/
+body{
+    background:#F4F7FB !important;
+}
+form{
+    background:#fff;
+}
+
 .chat_container{
     max-width: 790px;
     /* height: 100vh; */

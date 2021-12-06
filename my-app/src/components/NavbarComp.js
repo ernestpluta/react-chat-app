@@ -5,13 +5,13 @@ import Signout from '../pages/Signout';
 import './NavbarComp.css';
 import ProfilePic from '../assets/annonymous.png';
 import { auth } from '../firebase/firebase';
-import { doc, onSnapshot ,getDoc} from '@firebase/firestore';
+import { doc, onSnapshot , getDoc} from '@firebase/firestore';
 import { db } from '../firebase/firebase';
 import { useCallback, useEffect, useState } from 'react';
 import { updateProfile } from '@firebase/auth';
 export default function NavbarComp() {
   const { currentUser, setCurrentUser } = useAuth();
-  const [userName, setUserName] = useState();
+  const [user, setUser] = useState(null)
 
   // const readUserName = () => {
   //   onSnapshot(doc(db, 'users', auth.currentUser.uid), (doc) => {
@@ -22,10 +22,11 @@ export default function NavbarComp() {
   // }
 
   useEffect(() => {
-    const getUserName = async() => {
-      if (currentUser) {
-         onSnapshot(doc(db, 'users', auth.currentUser.uid),(doc) => {
-           updateProfile(auth.currentUser, {
+    const getUserName = async () => {
+      if (auth.currentUser) {
+          onSnapshot(doc(db, 'users', auth.currentUser.uid), async (doc) => {
+            console.log(doc)
+            await updateProfile(auth.currentUser, {
             displayName: doc.data().name,
           });
         });
@@ -38,7 +39,7 @@ export default function NavbarComp() {
       <div>
         <Navbar
           className="py-3"
-          style={{ boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px' }}
+          style={{ boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px', background: '#fff' }}
         >
           <Container className="py-2">
             <Navbar.Brand href="/" className="font-weight-bold">
@@ -47,7 +48,7 @@ export default function NavbarComp() {
             <Navbar.Toggle />
             <Navbar.Collapse className="justify-content-end">
               <Navbar.Text>
-                {auth.currentUser?.displayName && (
+                {user?.name && (
                   <span className="me-3">Cześć, {auth.currentUser.displayName}</span>
                 )}
               </Navbar.Text>
@@ -55,9 +56,9 @@ export default function NavbarComp() {
                 <Dropdown>
                   <Dropdown.Toggle variant="transparent" className="px-0 py-0">
                     <img
-                      src={ProfilePic}
+                      src={auth.currentUser?.photoURL || ProfilePic}
                       alt="Profile pic"
-                      width="38px"
+                      style={{width:'40px', height: '40px'}}
                       className="rounded-circle"
                     />
                   </Dropdown.Toggle>

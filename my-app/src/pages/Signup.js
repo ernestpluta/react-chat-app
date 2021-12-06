@@ -13,9 +13,10 @@ export default function Signup() {
     name: '',
     email: '',
     password: '',
+    lastName: ''
   });
   const navigate = useNavigate()
-  const { name, email, password } = userData;
+  const { name, lastName, email, password } = userData;
 
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
@@ -34,15 +35,14 @@ export default function Signup() {
       await setDoc(doc(db, 'users', cred.user.uid), {
         uid: cred.user.uid,
         name: name,
+        lastName: lastName,
         email: email,
         createdAt: Timestamp.fromDate(new Date()),
         isOnline: true,
-      }).then(() => {
-        setUserData({name: '', email: '', password: ''})
-        localStorage.setItem('userAuthenticated',true)
-        setIsPending(false);
       })
-      navigate('/dashboard')
+        setUserData({name: '', lastName: '', email: '', password: ''})
+        // localStorage.setItem('userAuthenticated',true)
+        setIsPending(false);
     } catch (err) {
       setIsPending(false);
       setError(err.message);
@@ -69,6 +69,14 @@ export default function Signup() {
                   placeholder="Name"
                   onChange={handleChange}
                   name="name"
+                />
+              </FloatingLabel>
+              <FloatingLabel controlId="lastName" label="Last Name" className="mb-3">
+                <Form.Control
+                  type="name"
+                  placeholder="lastName"
+                  onChange={handleChange}
+                  name="lastName"
                 />
               </FloatingLabel>
               <FloatingLabel

@@ -1,6 +1,6 @@
 import { getFirestore } from '@firebase/firestore';
 import { initializeApp} from 'firebase/app';
-// import firebase from 'firebase/compat/app';
+import { getStorage } from 'firebase/storage'
 import { getAuth } from 'firebase/auth';
 require('dotenv').config({path:'./.env'})
 
@@ -18,4 +18,5 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 const db = getFirestore(app)
-export { db, auth };
+const storage = getStorage(app)
+export { db, auth, storage };

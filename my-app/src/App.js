@@ -17,16 +17,16 @@ import { useNavigate } from 'react-router-dom';
 
 
 function App() {
-// const {isAuthed, setIsAuthed} = useAuth()
+const {currentUser} = useAuth()
 console.log(localStorage.userAuthenticated)
   return (
     <div className="App">
       <Navbar/>
       <Routes>
-        <Route path="/" element={localStorage.userAuthenticated ? <Home/> : <Navigate to="/login" element={<Login/>}/> }/>
-        <Route path="/login" element={!localStorage.userAuthenticated ? <Login/> : <Navigate to="/dashboard" element={<Dashboard/>}/>}/>
-        <Route path="/signup" element={!localStorage.userAuthenticated ? <Signup/> : <Navigate to="/dashboard" element={<Dashboard/>}/>}/>
-        <Route path="/dashboard" element={localStorage.userAuthenticated ? <Dashboard/> : <Navigate to="/login" element={<Login/>}/>}/>
+        <Route path="/" element={currentUser ? <Home/> : <Navigate to="/login" element={<Login/>}/> }/>
+        <Route path="/login" element={!currentUser ? <Login/> : <Navigate to="/dashboard" element={<Dashboard/>}/>}/>
+        <Route path="/signup" element={!currentUser ? <Signup/> : <Navigate to="/dashboard" element={<Dashboard/>}/>}/>
+        <Route path="/dashboard" element={currentUser ? <Dashboard/> : <Navigate to="/login" element={<Login/>}/>}/>
         <Route path="/forgot-password" element={<ForgotPassword/>}/>
       </Routes>
     </div>
