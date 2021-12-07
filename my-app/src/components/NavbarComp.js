@@ -25,7 +25,7 @@ export default function NavbarComp() {
     const getUserName = async () => {
       if (auth.currentUser) {
           onSnapshot(doc(db, 'users', auth.currentUser.uid), async (doc) => {
-            console.log(doc)
+            // console.log(doc)
             await updateProfile(auth.currentUser, {
             displayName: doc.data().name,
           });
@@ -33,7 +33,7 @@ export default function NavbarComp() {
       }
     }
     getUserName()
-  }, [currentUser]);
+  }, []);
   return (
     <div>
       <div>
@@ -48,8 +48,8 @@ export default function NavbarComp() {
             <Navbar.Toggle />
             <Navbar.Collapse className="justify-content-end">
               <Navbar.Text>
-                {user?.name && (
-                  <span className="me-3">Cześć, {auth.currentUser.displayName}</span>
+                {auth.currentUser && (
+                  <span className="me-3">Cześć, {auth.currentUser?.displayName}</span>
                 )}
               </Navbar.Text>
               {currentUser && (

@@ -5,3 +5,10 @@ div .camera{
     width:40px;
     cursor: pointer;
 }
+div .camera-center{
+    position: relative;
+    top:0px;
+    left: -90px;
+    width:40px;
+    cursor: pointer;
+}

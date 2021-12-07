@@ -18,6 +18,7 @@ import {
   ref,
   uploadBytes,
 } from '@firebase/storage';
+import { onSnapshot } from '@firebase/firestore';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import ProfilePic from '../assets/annonymous.png';
@@ -35,9 +36,12 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (auth.currentUser) {
-      getDoc(doc(db, 'users', auth.currentUser.uid)).then((doc) => {
+      // getDoc(doc(db, 'users', auth.currentUser.uid)).then((doc) => {
+      //   if (doc.exists) setUser(doc.data());
+      // });
+      onSnapshot(doc(db, 'users', auth.currentUser.uid), async (doc) => {
         if (doc.exists) setUser(doc.data());
-      });
+      })
     }
     if (img) {
       const uploadImage = async () => {
@@ -111,7 +115,7 @@ export default function Dashboard() {
                       />
                       <div className="overlay"></div>
                       <label htmlFor="pic" className="camera-pic">
-                        <Camera />
+                        <Camera userPic={user?.profilePicture}/>
                       </label>
                         <DeleteProfilePic className="trash" deleteImage={deleteImage} userPic={user?.profilePicture}/>
                       {/* {user?.ProfilePicture ? <DeleteProfilePic className="trash" deleteImage={deleteImage}/> : null} */}
