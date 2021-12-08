@@ -1,0 +1,70 @@
+.user_container {
+    color: #333;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: 0.3s ease-in-out all;
+}
+.user_container:hover , .user_wrapper:hover{
+    background: rgba(244, 247, 251,0.5)
+}
+
+.user_wrapper{
+    display: flex;
+    padding: .7rem 0;
+    align-items: center;
+    border-radius: 20px;
+}
+
+.user_wrapper .user-profile {
+    width: 60px;
+    height: 60px;
+}
+
+.user_image_status{
+    position: relative;
+}
+.user_status{
+    position: absolute;
+    bottom:2px;
+    right:16px;
+    padding:6px;
+    border:2px solid #fff;
+    width:10px;
+    height: auto;
+    border-radius: 50%;
+}
+
+.user_name_message {
+    overflow: hidden;
+}
+.user_name_message h6 {
+    font-size: 16px;
+}
+
+.user_name_message p {
+    font-size: 14px;
+    color: #adadad;
+}
+
+.user_hour {
+    font-weight: 600;
+}
+.selected_user{
+    background: rgba(244, 247, 251,0.7);
+}
+.trunk{
+    white-space: nowrap;
+    width:160px;
+    overflow:hidden;
+    text-overflow: ellipsis;
+}
+.unread{
+    padding:4px;
+    border-radius: 50%;
+    background:orange;
+}
+@media (max-width:420px){
+    .trunk{
+        width:140px;
+    }
+}

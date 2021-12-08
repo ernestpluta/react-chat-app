@@ -1,17 +1,22 @@
 .dashboard{
     max-width: 420px;
     margin: 10rem 0;
-    border:1px solid rgb(216, 216, 216);
     padding:50px 30px;
-    border-radius: 10px;
+    border-radius: 20px;
+    box-shadow: rgba(180, 180, 180, 0.1) 0px 4px 10px;
 }
-@media (max-width: 420px) {
-    .dashboard{
-        max-width: 360px !important;
-        padding:50px 5px;
-    }
-    
+.dropdown-menu{
+  border:none !important;
+  border-radius: 10px !important;
+  box-shadow: rgba(180, 180, 180, 0.4) 0px 0px 8px -1px;
 }
+.dropdown-item{
+  padding:.5rem .8rem !important;
+  border-radius:5px;
+  transition: .3s ease-in-out all;
+}
+
+
 .profile_container {
     display: flex;
     align-items: center;
@@ -65,3 +70,19 @@
   .text_container h3 {
     text-align: left;
   }
+  @media (max-width: 420px) {
+    .dashboard{
+        max-width: 360px !important;
+        text-align: center;
+    }
+    .dropdown-menu{
+      margin-top: 5px !important;  
+    }
+   .img_container {
+     margin-left:auto;
+     padding-left:4.3rem;
+   }
+   .overlay{
+     left:60%;
+   }
+}

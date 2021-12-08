@@ -4,7 +4,6 @@ import {
   Form,
   Alert,
   Spinner,
-  Button,
   Container,
   Row,
   Col,
@@ -14,13 +13,9 @@ import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import {
   deleteObject,
   getDownloadURL,
-  getStorage,
   ref,
   uploadBytes,
 } from '@firebase/storage';
-import { onSnapshot } from '@firebase/firestore';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
 import ProfilePic from '../assets/annonymous.png';
 import Camera from '../components/Camera';
 import './Dashboard.css';
@@ -31,26 +26,19 @@ export default function Dashboard() {
   const [isPending, setIsPending] = useState(false);
   const [img, setImage] = useState('');
   const [user, setUser] = useState(null);
-  const { currentUser } = useAuth();
 
 
   useEffect(() => {
     if (auth.currentUser) {
-      // getDoc(doc(db, 'users', auth.currentUser.uid)).then((doc) => {
-      //   if (doc.exists) setUser(doc.data());
-      // });
-      onSnapshot(doc(db, 'users', auth.currentUser.uid), async (doc) => {
+      getDoc(doc(db, 'users', auth.currentUser.uid)).then((doc) => {
         if (doc.exists) setUser(doc.data());
-      })
+      });
     }
     if (img) {
       const uploadImage = async () => {
         try {
           setIsPending(true);
           const imageRef = ref(storage,`profilePic/${new Date().getTime()} - ${img.name}`);
-          // if(user.profilePicturePath){
-          //   await deleteObject(ref(storage, user.profilePicture))
-          // }
           const snapshot = await uploadBytes(imageRef, img);
           const url = await getDownloadURL(ref(storage, snapshot.ref.fullPath));
           console.log(url)
@@ -111,14 +99,13 @@ export default function Dashboard() {
                         src={auth.currentUser?.photoURL || ProfilePic}
                         roundedCircle
                         style={{ width: '140px', height: '140px' }}
-                        className="my-2"
+                        className="profile-pic my-2"
                       />
                       <div className="overlay"></div>
                       <label htmlFor="pic" className="camera-pic">
                         <Camera userPic={user?.profilePicture}/>
                       </label>
                         <DeleteProfilePic className="trash" deleteImage={deleteImage} userPic={user?.profilePicture}/>
-                      {/* {user?.ProfilePicture ? <DeleteProfilePic className="trash" deleteImage={deleteImage}/> : null} */}
                       <input
                         type="file"
                         accept="image/*"
@@ -131,36 +118,13 @@ export default function Dashboard() {
                   </div>
                 </Col>
                 <Col xs={12} md={8}>
-                  <h2>{user?.name} {user?.lastName || ''}</h2>
+                  <h2 >{user?.name} {user?.lastName || ''}</h2>
                   <p>{user?.email}</p>
-                  <hr />
-                  <p>Created At: {user?.createdAt.toDate().toDateString()}</p>
                 </Col>
               </Row>
-              {/* <hr />
-                <Col xs={12} md={8}>
-                  <h2>Reset Password</h2>
-                </Col>
-                <Row className="d-flex align-items-center">
-                  <Col>
-                    <div className="">Set Username</div>
-                    <Form.Control></Form.Control>
-                  </Col>
-                </Row>
-                <Button
-                  variant="primary"
-                  type="submit"
-                  className="mt-4 w-25 py-2 ps-auto"
-                >
-                  Update
-                </Button> */}
             </Container>
           </>
         </Form.Group>
-
-        {/* <Button variant="primary" type="submit" className="mt-4 w-100 py-2">
-          Sign Up
-        </Button> */}
       </Form>
     </div>
   );

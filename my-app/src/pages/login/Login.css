@@ -1,14 +1,15 @@
 .loginNSignUp{
     max-width: 420px;
     margin: 10rem auto;
-    border:1px solid rgb(216, 216, 216);
+    box-shadow: rgba(180, 180, 180, 0.1) 0px 4px 10px;
     padding:50px 30px;
-    border-radius: 10px;
+    border-radius: 20px;
 }
 @media (max-width: 420px) {
     .loginNSignUp{
         max-width: 350px !important;
         padding:50px 25px;
+        margin:6rem auto;
     }
     
 }

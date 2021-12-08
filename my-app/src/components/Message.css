@@ -1,0 +1,43 @@
+.chat_user_status{
+    position: absolute;
+    bottom:2.3rem;
+    left:53%;
+    padding:10px;
+    border:2px solid #fff;
+    width:10px;
+    height: auto;
+    border-radius: 50%;
+}
+.send_button{
+    border:none;
+    border-radius: 50%;
+    left:-50px;
+    top:-20px;
+    background:none;
+}
+/* .send_button_image{
+    top:-25px;
+    right:15px;
+} */
+.custom-input{
+    background:#F4F7FB !important;
+    border:none;
+    width:650px;
+    height: 50px;
+    padding: 0 3rem 0 3rem;
+    border-radius: 10px;
+}
+.custom-input:focus{
+    outline:none;
+}
+@media(max-width: 420px) {
+    .custom-input{
+        /* margin-left:-10px; */
+        width:280px;
+        padding: 0 3rem 0 3rem;
+    }
+    
+    .send_button{
+        left:-60px !important;
+    }
+}

@@ -1,5 +1,5 @@
 import { Form, Button, Alert, Spinner, FloatingLabel } from 'react-bootstrap';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { setDoc, doc, Timestamp } from '@firebase/firestore';
 import { db, auth } from '../firebase/firebase';
@@ -16,7 +16,17 @@ export default function Signup() {
     lastName: ''
   });
   const navigate = useNavigate()
+  const mounted = useRef()
   const { name, lastName, email, password } = userData;
+
+
+
+useEffect(() => {
+  mounted.current = true;
+  return () => {
+    mounted.current = false
+  }
+},[])
 
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
@@ -30,7 +40,7 @@ export default function Signup() {
 
     try {
       setError('');
-      // setIsPending(true);
+      setIsPending(true);
       const cred = await createUserWithEmailAndPassword(auth, email, password);
       await setDoc(doc(db, 'users', cred.user.uid), {
         uid: cred.user.uid,
@@ -41,12 +51,13 @@ export default function Signup() {
         isOnline: true,
       })
         setUserData({name: '', lastName: '', email: '', password: ''})
-        // localStorage.setItem('userAuthenticated',true)
-        setIsPending(false);
     } catch (err) {
       setIsPending(false);
       setError(err.message);
-    }
+    } 
+    finally {
+      return mounted && setIsPending(false)
+   }
   };
   return (
     <div>
@@ -71,7 +82,7 @@ export default function Signup() {
                   name="name"
                 />
               </FloatingLabel>
-              <FloatingLabel controlId="lastName" label="Last Name" className="mb-3">
+              <FloatingLabel controlId="lastName" label="Last Name" className="mb-1">
                 <Form.Control
                   type="name"
                   placeholder="lastName"
@@ -79,10 +90,13 @@ export default function Signup() {
                   name="lastName"
                 />
               </FloatingLabel>
+              <Form.Text className="ms-1">
+                We will never share any of your credentials.
+              </Form.Text>
               <FloatingLabel
                 controlId="Email"
                 label="Email address"
-                className="mb-1"
+                className="mb-1 mt-3"
               >
                 <Form.Control
                   type="email"
@@ -91,9 +105,6 @@ export default function Signup() {
                   onChange={handleChange}
                 />
               </FloatingLabel>
-              <Form.Text className="ms-1">
-                We will never share your email with anybody.
-              </Form.Text>
               <FloatingLabel
                 controlId="Password"
                 label="Password"

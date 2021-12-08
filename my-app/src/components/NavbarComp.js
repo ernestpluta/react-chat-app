@@ -9,23 +9,14 @@ import { doc, onSnapshot , getDoc} from '@firebase/firestore';
 import { db } from '../firebase/firebase';
 import { useCallback, useEffect, useState } from 'react';
 import { updateProfile } from '@firebase/auth';
+import ChatIcon from '../assets/Chatbook.svg'
 export default function NavbarComp() {
   const { currentUser, setCurrentUser } = useAuth();
-  const [user, setUser] = useState(null)
-
-  // const readUserName = () => {
-  //   onSnapshot(doc(db, 'users', auth.currentUser.uid), (doc) => {
-  //     setCurrentUser(currentUser.displayName = doc.data().name)
-  //     // setUserName(doc.data().name)
-  //     // currentUser.displayName = userName
-  //   })
-  // }
 
   useEffect(() => {
     const getUserName = async () => {
       if (auth.currentUser) {
           onSnapshot(doc(db, 'users', auth.currentUser.uid), async (doc) => {
-            // console.log(doc)
             await updateProfile(auth.currentUser, {
             displayName: doc.data().name,
           });
@@ -43,7 +34,7 @@ export default function NavbarComp() {
         >
           <Container className="py-2">
             <Navbar.Brand href="/" className="font-weight-bold">
-              Chatbook
+             <img src={ChatIcon} style={{width: '28px'}} alt="" /> Chatbook
             </Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse className="justify-content-end">
@@ -62,7 +53,7 @@ export default function NavbarComp() {
                       className="rounded-circle"
                     />
                   </Dropdown.Toggle>
-                  <Dropdown.Menu className="p-2">
+                  <Dropdown.Menu className="p-2" style={window.innerWidth < 420 ? {left: '-150%'} : {}}>
                     <Dropdown.Item href="/">Home</Dropdown.Item>
                     <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
                     <Dropdown.Item>

@@ -26,7 +26,7 @@ export default function Login() {
   console.log(error);
   return (
     <div>
-      <Form className="mx-auto" onSubmit={handleReset}>
+      <Form className="loginNSignUp mx-auto" onSubmit={handleReset}>
         <h3 className="mb-4">Change Password</h3>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           {error && <Alert variant="danger">{error}</Alert>}
